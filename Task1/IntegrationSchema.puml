@@ -3,7 +3,7 @@
 
 title Схема интеграции приложений
 
-Person(client, "Клиент")
+Person(client, "Клиент банка")
 Person(frontEmployee, "Сотрудник фронт-офиса")
 Person(backEmployee, "Сотрудник бэк-офиса")
 Person(callerEmployee, "Сотрудник кол-центра")
