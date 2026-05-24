@@ -1,0 +1,56 @@
+@startuml IntegrationSchema
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+title Схема интеграции приложений
+
+Person(client, "Клиент")
+Person(frontEmployee, "Сотрудник фронт-офиса")
+Person(backEmployee, "Сотрудник бэк-офиса")
+Person(callerEmployee, "Сотрудник кол-центра")
+
+System(internetBank, "Интернет-банк")
+System(abs, "Автоматизированная банковская система (АБС)")
+System(callSystem, "Система кол-центра")
+System(smsGateway, "СМС-шлюз телеком-оператора")
+System(website, "Сайт")
+System(creditConveyor, "Кредитный конвейер")
+System(scoringSystem, "Система кредитного скоринга")
+
+System_Ext(partnerCallSystem, "Система партнёрского кол-центра")
+System_Ext(telecomOperator, "Телеком-оператор")
+System_Ext(creditBureau, "Бюро кредитных историй")
+
+Rel(client, frontEmployee, "Взаимодействует с")
+Rel(client, callerEmployee, "Взаимодействует с")
+Rel_L(client, website, "Просматривает")
+Rel(client, internetBank, "Использует")
+
+Rel(frontEmployee, abs, "Использует")
+Rel(frontEmployee, backEmployee, "Взаимодействует с")
+
+Rel(callerEmployee, callSystem, "Использует")
+
+Rel(callSystem, abs, "Передает данные в")
+
+Rel(backEmployee, abs, "Использует")
+Rel(backEmployee, frontEmployee, "Взаимодействует с")
+
+Rel(abs, creditConveyor, "Передает данные в")
+Rel_R(abs, smsGateway, "Передает данные в")
+
+Rel(creditConveyor, abs, "Передает данные в")
+Rel(creditConveyor, scoringSystem, "Запрашивает данные из")
+
+Rel(scoringSystem, creditBureau, "Запрашивает данные из")
+Rel(scoringSystem, abs, "Запрашивает данные из")
+
+Rel_R(smsGateway, telecomOperator, "Передает данные в")
+Rel(telecomOperator, client, "Взаимодействует с")
+
+Rel(internetBank, abs, "Взаимодействует с")
+
+Rel_L(partnerCallSystem, client, "Взаимодействует с")
+
+LAYOUT_TOP_DOWN()
+
+@enduml
