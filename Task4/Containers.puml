@@ -3,6 +3,8 @@
 
 Person(client, "Клиент банка")
 Person(backEmployee, "Сотрудник бэк-офиса")
+Person(callerEmployee, "Сотрудник кол-центра")
+Person(externalPartnerEmployee, "Сотрудник партнёрского кол-центра")
 
 Container(website, "Сайт")
 
@@ -24,6 +26,7 @@ System_Boundary(depositSystem, "Система для работы с депоз
 }
 
 Container(smsGateway, "СМС-шлюз телеком-оператора")
+Container(fileArchive, "Файловое хранилище")
 
 Container_Ext(telecomOperator, "Телеком-оператор")
 
@@ -32,6 +35,7 @@ Rel(client, website, "Использует")
 
 Rel(backEmployee, depositServiceFrontend, "Использует")
 Rel(backEmployee, abs, "Использует")
+Rel(callerEmployee, depositServiceFrontend, "Использует")
 
 Rel(internetBank, depositService, "Взаимодействует с")
 Rel(website, depositService, "Взаимодействует с")
@@ -48,6 +52,8 @@ Rel(internetBankFrontend, internetBank, "Использует")
 Rel(internetBank, internetBankDb, "Использует")
 
 Rel(abs, absDb, "Использует")
+Rel_D(depositService, fileArchive, "Сохраняет данные в")
+Rel_L(externalPartnerEmployee, fileArchive, "Использует")
 
 LAYOUT_TOP_DOWN()
 
