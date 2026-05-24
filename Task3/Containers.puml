@@ -1,0 +1,55 @@
+@startuml Containers
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(client, "Клиент банка")
+Person(backEmployee, "Сотрудник бэк-офиса")
+
+Container(website, "Сайт")
+
+System_Boundary(internetBankSystem, "Интернет-банк"){
+    Container(internetBankFrontend, "Фронтэнд")
+    Container(internetBank, "Бэкенд", "ASP.NET MVC 4.5")
+    ContainerDb(internetBankDb, "База данных", "MS SQL")
+}
+
+System_Boundary(absSystem, "АБС"){
+    System(abs, "Клиент", "Deplhi")
+    SystemDb(absDb, "База данных", "Oracle")
+}
+
+System_Boundary(depositSystem, "Система для работы с депозитами"){
+    System(depositServiceFrontend, "Фронтенд для сотрудников")
+    System(depositService, "Сервис для работы с депозитами", ".NET/Java/PHP")
+    SystemDb(depositServiceDb, "База данных", "Oracle/MSSQL")
+}
+
+System(smsGateway, "СМС-шлюз телеком-оператора")
+
+System_Ext(telecomOperator, "Телеком-оператор")
+
+Rel(client, internetBankFrontend, "Использует")
+Rel(client, website, "Использует")
+
+Rel(backEmployee, depositServiceFrontend, "Использует")
+Rel(backEmployee, abs, "Использует")
+
+Rel(internetBank, depositService, "Взаимодействует с")
+Rel(website, depositService, "Взаимодействует с")
+
+Rel_R(depositService, smsGateway, "Передает данные в")
+Rel(depositService, absDb, "Взаимодействует с")
+Rel(depositService, depositServiceDb, "Использует")
+Rel(depositServiceFrontend, depositService, "Использует")
+
+Rel_R(smsGateway, telecomOperator, "Передает данные в")
+Rel_R(telecomOperator, client, "Взаимодействует с")
+
+Rel(internetBankFrontend, internetBank, "Использует")
+Rel(internetBank, internetBankDb, "Использует")
+
+Rel(abs, absDb, "Использует")
+
+LAYOUT_TOP_DOWN()
+
+@enduml
+

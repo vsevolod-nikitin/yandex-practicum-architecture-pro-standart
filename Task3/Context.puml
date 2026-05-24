@@ -1,0 +1,32 @@
+@startuml Context
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+Person(client, "Клиент банка")
+Person(backEmployee, "Сотрудник бэк-офиса")
+
+System(website, "Сайт")
+System(internetBank, "Интернет-банк")
+System(depositSystem, "Система для работы с депозитами")
+System(abs, "Автоматизированная банковская система (АБС)")
+System(smsGateway, "СМС-шлюз телеком-оператора")
+
+System_Ext(telecomOperator, "Телеком-оператор")
+
+Rel(client, internetBank, "Использует")
+Rel(client, website, "Использует")
+
+Rel(backEmployee, depositSystem, "Использует")
+Rel(backEmployee, abs, "Использует")
+
+Rel(internetBank, depositSystem, "Взаимодействует с")
+Rel(website, depositSystem, "Взаимодействует с")
+
+Rel_L(depositSystem, smsGateway, "Передает данные в")
+Rel(depositSystem, abs, "Взаимодействует с")
+
+Rel_R(smsGateway, telecomOperator, "Передает данные в")
+Rel_R(telecomOperator, client, "Взаимодействует с")
+
+LAYOUT_TOP_DOWN()
+
+@enduml
