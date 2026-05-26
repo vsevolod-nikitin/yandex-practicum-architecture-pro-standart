@@ -1,0 +1,43 @@
+@startuml Context
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+Person(client, "Клиент банка")
+Person(backEmployee, "Сотрудник бэк-офиса")
+Person(creditEmployee, "Сотрудник кредитного отдела")
+
+System(website, "Сайт")
+System(internetBank, "Интернет-банк")
+System(creditSystem, "Система для работы с кредитами")
+System(abs, "Автоматизированная банковская система (АБС)")
+System(creditConveyor, "Кредитный конвейер")
+System(scoringSystem, "Система кредитного скоринга")
+System(smsGateway, "СМС-шлюз телеком-оператора")
+
+System_Ext(creditBureau, "Бюро кредитных историй")
+System_Ext(telecomOperator, "Телеком-оператор")
+
+Rel(client, internetBank, "Использует")
+Rel(client, website, "Использует")
+
+Rel(internetBank, creditSystem, "Взаимодействует с")
+Rel(website, creditSystem, "Взаимодействует с")
+
+Rel(backEmployee, abs, "Использует")
+Rel(creditEmployee, creditConveyor, "Использует")
+
+Rel(creditSystem, abs, "Взаимодействует с")
+Rel(abs, creditConveyor, "Взаимодействует с")
+
+Rel_L(creditConveyor, scoringSystem, "Взаимодействует с")
+Rel(scoringSystem, creditBureau, "Получает данные из")
+
+Rel_L(creditSystem, smsGateway, "Передает данные в")
+Rel_U(smsGateway, telecomOperator, "Передает данные в")
+Rel_U(telecomOperator, client, "Взаимодействует с")
+
+Rel(creditSystem, scoringSystem, "Использует")
+Rel(creditSystem, creditBureau, "Использует")
+
+LAYOUT_TOP_DOWN()
+
+@enduml
