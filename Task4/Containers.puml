@@ -21,8 +21,8 @@ System_Boundary(absSystem, "АБС"){
 
 System_Boundary(depositSystem, "Система для работы с депозитами"){
     Container(depositServiceFrontend, "Фронтенд для сотрудников")
-    Container(depositService, "Сервис для работы с депозитами", ".NET/Java/PHP")
-    ContainerDb(depositServiceDb, "База данных", "Oracle/MSSQL")
+    Container(depositService, "Сервис для работы с депозитами", ".NET")
+    ContainerDb(depositServiceDb, "База данных", "PostgreSQL")
 }
 
 Container(smsGateway, "СМС-шлюз телеком-оператора")
