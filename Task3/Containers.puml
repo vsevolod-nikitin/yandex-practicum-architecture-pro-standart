@@ -14,6 +14,7 @@ System_Boundary(internetBankSystem, "Интернет-банк"){
 
 System_Boundary(absSystem, "АБС"){
     Container(abs, "Клиент", "Deplhi")
+    Container(absMQIntegration, "Интеграция с брокером сообщений", ".NET")
     ContainerDb(absDb, "База данных", "Oracle")
 }
 
@@ -24,6 +25,7 @@ System_Boundary(depositSystem, "Система для работы с депоз
 }
 
 Container(smsGateway, "СМС-шлюз телеком-оператора")
+Container(messageBroker, "Система обмена сообщениями", "Kafka")
 
 Container_Ext(telecomOperator, "Телеком-оператор")
 
@@ -36,8 +38,8 @@ Rel(backEmployee, abs, "Использует")
 Rel(internetBank, depositService, "Взаимодействует с")
 Rel(website, depositService, "Взаимодействует с")
 
-Rel_R(depositService, smsGateway, "Передает данные в")
-Rel(depositService, absDb, "Взаимодействует с")
+Rel(depositService, smsGateway, "Передает данные в")
+Rel(depositService, messageBroker, "Взаимодействует с")
 Rel(depositService, depositServiceDb, "Использует")
 Rel(depositServiceFrontend, depositService, "Использует")
 
@@ -48,6 +50,8 @@ Rel(internetBankFrontend, internetBank, "Использует")
 Rel(internetBank, internetBankDb, "Использует")
 
 Rel(abs, absDb, "Использует")
+Rel(absMQIntegration, messageBroker, "Взаимодействует с")
+Rel(absMQIntegration, absDb, "Использует")
 
 LAYOUT_TOP_DOWN()
 
