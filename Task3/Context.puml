@@ -24,7 +24,7 @@ Rel(website, depositSystem, "Взаимодействует с")
 
 Rel_L(depositSystem, smsGateway, "Передает данные в")
 Rel(depositSystem, messageBroker, "Взаимодействует с")
-Rel_R(messageBroker, abs, "Взаимодействует с")
+Rel(abs, messageBroker, "Взаимодействует с")
 
 Rel_R(smsGateway, telecomOperator, "Передает данные в")
 Rel_R(telecomOperator, client, "Взаимодействует с")

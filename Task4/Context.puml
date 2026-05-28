@@ -11,6 +11,7 @@ System(internetBank, "Интернет-банк")
 System(depositSystem, "Система для работы с депозитами")
 System(abs, "Автоматизированная банковская система (АБС)")
 System(smsGateway, "СМС-шлюз телеком-оператора")
+System(messageBroker, "Система обмена сообщениями", "Kafka")
 System(fileArchive, "Файловое хранилище")
 
 System_Ext(telecomOperator, "Телеком-оператор")
@@ -25,7 +26,8 @@ Rel(internetBank, depositSystem, "Взаимодействует с")
 Rel(website, depositSystem, "Взаимодействует с")
 
 Rel_L(depositSystem, smsGateway, "Передает данные в")
-Rel(depositSystem, abs, "Взаимодействует с")
+Rel(depositSystem, messageBroker, "Взаимодействует с")
+Rel(abs, messageBroker, "Взаимодействует с")
 Rel(depositSystem, fileArchive, "Сохраняет данные в")
 
 Rel_R(smsGateway, telecomOperator, "Передает данные в")
