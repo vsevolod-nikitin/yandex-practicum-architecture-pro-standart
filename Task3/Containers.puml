@@ -4,7 +4,7 @@
 Person(client, "Клиент банка")
 Person(backEmployee, "Сотрудник бэк-офиса")
 
-Container(website, "Сайт", "React.js")
+Container(website, "Сайт", "PHP + React.js")
 
 System_Boundary(internetBankSystem, "Интернет-банк"){
     Container(internetBankFrontend, "Фронтэнд интернет-банка", "React.js")
@@ -24,7 +24,7 @@ System_Boundary(depositSystem, "Система для работы с депоз
     ContainerDb(depositServiceDb, "База данных", "PostgreSQL")
 }
 
-Container(smsGateway, "СМС-шлюз")
+Container(smsGateway, "СМС-шлюз телеком-оператора")
 Container(messageBroker, "Система обмена сообщениями", "Apache Kafka")
 
 Container_Ext(telecomOperator, "Телеком-оператор")
