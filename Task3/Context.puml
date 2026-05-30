@@ -4,12 +4,12 @@
 Person(client, "Клиент банка")
 Person(backEmployee, "Сотрудник бэк-офиса")
 
-System(website, "Сайт")
-System(internetBank, "Интернет-банк")
-System(depositSystem, "Система для работы с депозитами")
-System(abs, "Автоматизированная банковская система (АБС)")
-System(smsGateway, "СМС-шлюз телеком-оператора")
-System(messageBroker, "Система обмена сообщениями", "Kafka")
+System(website, "Сайт", "Информационный портал банка")
+System(internetBank, "Интернет-банк", "Приложение для управления счетами")
+System(depositSystem, "Система для работы с депозитами", "Управление депозитными счетами и операциями")
+System(abs, "Автоматизированная банковская система (АБС)", "Ядро банковской системы для обработки финансовых операций")
+System(smsGateway, "СМС-шлюз", "Передача уведомлений клиентам")
+System(messageBroker, "Система обмена сообщениями", "Apache Kafka для асинхронного взаимодействия")
 
 System_Ext(telecomOperator, "Телеком-оператор")
 
@@ -19,15 +19,15 @@ Rel(client, website, "Использует")
 Rel(backEmployee, depositSystem, "Использует")
 Rel(backEmployee, abs, "Использует")
 
-Rel(internetBank, depositSystem, "Взаимодействует с")
-Rel(website, depositSystem, "Взаимодействует с")
+Rel(internetBank, depositSystem, "операции с депозитами", "HTTPS REST API")
+Rel(website, depositSystem, "информация о депозитах", "HTTPS REST API")
 
-Rel_L(depositSystem, smsGateway, "Передает данные в")
-Rel(depositSystem, messageBroker, "Взаимодействует с")
-Rel(abs, messageBroker, "Взаимодействует с")
+Rel_L(depositSystem, smsGateway, "отправка SMS уведомлений", "HTTPS")
+Rel(depositSystem, messageBroker, "события операций", "Kafka Topics")
+Rel(abs, messageBroker, "события операций", "Kafka Topics")
 
-Rel_R(smsGateway, telecomOperator, "Передает данные в")
-Rel_R(telecomOperator, client, "Взаимодействует с")
+Rel_R(smsGateway, telecomOperator, "отправка СМС")
+Rel_R(telecomOperator, client, "Доставка СМС уведомлений")
 
 LAYOUT_TOP_DOWN()
 
