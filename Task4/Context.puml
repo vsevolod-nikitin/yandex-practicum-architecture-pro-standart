@@ -12,7 +12,7 @@ System(depositSystem, "Система для работы с депозитам�
 System(abs, "Автоматизированная банковская система (АБС)")
 System(smsGateway, "СМС-шлюз телеком-оператора")
 System(messageBroker, "Система обмена сообщениями", "Kafka")
-System(fileArchive, "Файловое хранилище")
+System_Ext(fileArchive, "Файловое хранилище")
 
 System_Ext(telecomOperator, "Телеком-оператор")
 

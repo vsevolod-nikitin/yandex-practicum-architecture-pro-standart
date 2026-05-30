@@ -18,7 +18,7 @@ System_Boundary(depositSystem, "Система для работы с депоз
 }
 
 Container(smsGateway, "СМС-шлюз телеком-оператора")
-Container(fileArchive, "Файловое хранилище")
+Container_Ext(fileArchive, "Файловое хранилище")
 Container(messageBroker, "Система обмена сообщениями", "Kafka")
 
 Container_Ext(telecomOperator, "Телеком-оператор")
