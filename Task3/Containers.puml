@@ -22,7 +22,6 @@ System_Boundary(depositSystem, "Система для работы с депоз
     Container(depositServiceFrontend, "Фронтенд для сотрудников")
     Container(depositService, "Сервис для работы с депозитами", ".NET")
     ContainerDb(depositServiceDb, "База данных", "PostgreSQL")
-    ContainerDb(depositCache, "Кэш", "Redis")
 }
 
 Container(smsGateway, "СМС-шлюз телеком-оператора")
@@ -42,8 +41,7 @@ Rel(website, depositService, "Взаимодействует с")
 Rel(depositService, smsGateway, "Передает данные в")
 Rel(depositService, messageBroker, "Взаимодействует с")
 Rel(depositService, depositServiceDb, "Использует")
-Rel(depositService, depositCache, "Использует")
-Rel(depositServiceFrontend, depositService, "Использует")
+Rel_R(depositServiceFrontend, depositService, "Использует")
 
 Rel_R(smsGateway, telecomOperator, "Передает данные в")
 Rel_R(telecomOperator, client, "Взаимодействует с")

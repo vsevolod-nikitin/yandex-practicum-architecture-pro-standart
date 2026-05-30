@@ -5,15 +5,11 @@ Person(client, "Клиент банка")
 Person(backEmployee, "Сотрудник бэк-офиса")
 
 Container(website, "Сайт")
-
-System_Boundary(internetBankSystem, "Интернет-банк"){
-    Container(internetBankFrontend, "Фронтэнд")
-    Container(internetBank, "Бэкенд", "ASP.NET MVC 4.5")
-    ContainerDb(internetBankDb, "База данных", "MS SQL")
-}
+Container(internetBank, "Интернет-банк")
 
 System_Boundary(absSystem, "АБС"){
     Container(abs, "Клиент", "Deplhi")
+    Container(absMQIntegration, "Интеграция с брокером сообщений", ".NET")
     ContainerDb(absDb, "База данных", "Oracle")
 }
 
@@ -25,11 +21,12 @@ System_Boundary(creditSystem, "Система для работы с креди�
 
 Container(scoringSystem, "Система кредитного скоринга")
 Container(smsGateway, "СМС-шлюз телеком-оператора")
+Container(messageBroker, "Система обмена сообщениями", "Kafka")
 
 Container_Ext(telecomOperator, "Телеком-оператор")
 Container_Ext(creditBureau, "Бюро кредитных историй")
 
-Rel(client, internetBankFrontend, "Использует")
+Rel(client, internetBank, "Использует")
 Rel(client, website, "Использует")
 
 Rel(backEmployee, abs, "Использует")
@@ -37,19 +34,19 @@ Rel(internetBank, creditService, "Взаимодействует с")
 Rel(website, creditService, "Взаимодействует с")
 
 Rel_R(creditService, smsGateway, "Передает данные в")
-Rel(creditService, absDb, "Взаимодействует с")
 Rel(creditService, creditServiceDb, "Использует")
 Rel(creditService, creditCache, "Использует")
 
 Rel_R(smsGateway, telecomOperator, "Передает данные в")
 Rel_R(telecomOperator, client, "Взаимодействует с")
 
-Rel(internetBankFrontend, internetBank, "Использует")
-Rel(internetBank, internetBankDb, "Использует")
-
 Rel(abs, absDb, "Использует")
 Rel(creditService, scoringSystem, "Использует")
 Rel(creditService, creditBureau, "Использует")
+
+Rel(absMQIntegration, messageBroker, "Взаимодействует с")
+Rel(absMQIntegration, absDb, "Использует")
+Rel(creditService, messageBroker, "Взаимодействует с")
 
 LAYOUT_TOP_DOWN()
 

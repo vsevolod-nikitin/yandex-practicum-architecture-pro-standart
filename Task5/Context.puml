@@ -12,6 +12,7 @@ System(abs, "Автоматизированная банковская сист�
 System(creditConveyor, "Кредитный конвейер")
 System(scoringSystem, "Система кредитного скоринга")
 System(smsGateway, "СМС-шлюз телеком-оператора")
+System(messageBroker, "Система обмена сообщениями", "Kafka")
 
 System_Ext(creditBureau, "Бюро кредитных историй")
 System_Ext(telecomOperator, "Телеком-оператор")
@@ -25,15 +26,16 @@ Rel(website, creditSystem, "Взаимодействует с")
 Rel(backEmployee, abs, "Использует")
 Rel(creditEmployee, creditConveyor, "Использует")
 
-Rel(creditSystem, abs, "Взаимодействует с")
+Rel(creditSystem, messageBroker, "Взаимодействует с")
 Rel(abs, creditConveyor, "Взаимодействует с")
+Rel(abs, messageBroker, "Взаимодействует с")
 
-Rel_L(creditConveyor, scoringSystem, "Взаимодействует с")
+Rel(creditConveyor, scoringSystem, "Взаимодействует с")
 Rel(scoringSystem, creditBureau, "Получает данные из")
 
-Rel_L(creditSystem, smsGateway, "Передает данные в")
-Rel_U(smsGateway, telecomOperator, "Передает данные в")
-Rel_U(telecomOperator, client, "Взаимодействует с")
+Rel(creditSystem, smsGateway, "Передает данные в")
+Rel(smsGateway, telecomOperator, "Передает данные в")
+Rel(telecomOperator, client, "Взаимодействует с")
 
 Rel(creditSystem, scoringSystem, "Использует")
 Rel(creditSystem, creditBureau, "Использует")
