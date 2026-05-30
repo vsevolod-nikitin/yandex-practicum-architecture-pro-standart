@@ -4,11 +4,11 @@
 Person(client, "Клиент банка")
 Person(backEmployee, "Сотрудник бэк-офиса")
 
-Container(website, "Сайт")
-Container(internetBank, "Интернет-банк")
+Container(website, "Сайт", "PHP + React.js")
+Container(internetBank, "Интернет-банк", "React.js + ASP.NET MVC 4.5 + MS SQL")
 
 System_Boundary(absSystem, "АБС"){
-    Container(abs, "Клиент", "Deplhi")
+    Container(abs, "Клиент", "Delphi")
     Container(absMQIntegration, "Интеграция с брокером сообщений", ".NET")
     ContainerDb(absDb, "База данных", "Oracle")
 }
@@ -19,9 +19,9 @@ System_Boundary(creditSystem, "Система для работы с креди�
     ContainerDb(creditCache, "Кэш данных", "Redis")
 }
 
-Container(scoringSystem, "Система кредитного скоринга")
+Container(scoringSystem, "Система кредитного скоринга", "Python + PostgreSQL")
 Container(smsGateway, "СМС-шлюз телеком-оператора")
-Container(messageBroker, "Система обмена сообщениями", "Kafka")
+Container(messageBroker, "Система обмена сообщениями", "Apache Kafka")
 
 Container_Ext(telecomOperator, "Телеком-оператор")
 Container_Ext(creditBureau, "Бюро кредитных историй")
@@ -30,23 +30,23 @@ Rel(client, internetBank, "Использует")
 Rel(client, website, "Использует")
 
 Rel(backEmployee, abs, "Использует")
-Rel(internetBank, creditService, "Взаимодействует с")
-Rel(website, creditService, "Взаимодействует с")
+Rel(internetBank, creditService, "операции с кредитами", "HTTPS REST API")
+Rel(website, creditService, "операции с кредитами", "HTTPS REST API")
 
-Rel_R(creditService, smsGateway, "Передает данные в")
+Rel_R(creditService, smsGateway, "Отправляет СМС-коды подтверждения и уведомления", "HTTPS")
 Rel(creditService, creditServiceDb, "Использует")
 Rel(creditService, creditCache, "Использует")
 
-Rel_R(smsGateway, telecomOperator, "Передает данные в")
-Rel_R(telecomOperator, client, "Взаимодействует с")
+Rel_R(smsGateway, telecomOperator, "отправка СМС")
+Rel_R(telecomOperator, client, "Доставка СМС уведомлений")
 
 Rel(abs, absDb, "Использует")
-Rel(creditService, scoringSystem, "Использует")
-Rel(creditService, creditBureau, "Использует")
+Rel(creditService, scoringSystem, "Получает результаты скоринга для одобрения", "HTTPS REST API")
+Rel(creditService, creditBureau, "Запрашивает кредитную историю клиента", "HTTPS REST API")
 
-Rel(absMQIntegration, messageBroker, "Взаимодействует с")
+Rel(absMQIntegration, messageBroker, "события операций", "Kafka Topics")
 Rel(absMQIntegration, absDb, "Использует")
-Rel(creditService, messageBroker, "Взаимодействует с")
+Rel(creditService, messageBroker, "события операций", "Kafka Topics")
 
 LAYOUT_TOP_DOWN()
 
