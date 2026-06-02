@@ -1,0 +1,45 @@
+@startuml Context
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+Person(client, "Клиент банка")
+Person(backEmployee, "Сотрудник бэк-офиса")
+Person(creditEmployee, "Сотрудник кредитного отдела")
+
+System(website, "Сайт", "Информационный портал банка")
+System(internetBank, "Интернет-банк", "Приложение для управления счетами")
+System(creditSystem, "Система для работы с кредитами", "Центральная система обработки кредитных заявок и управления кредитами")
+System(abs, "Автоматизированная банковская система (АБС)", "Ядро банковской системы для обработки финансовых операций")
+System(creditConveyor, "Кредитный конвейер", "Система автоматизации процесса обработки кредитных заявок")
+System(scoringSystem, "Система кредитного скоринга", "Система оценки кредитоспособности заёмщиков и определения рисков")
+System(smsGateway, "СМС-шлюз телеком-оператора", "Передача уведомлений клиентам")
+System(messageBroker, "Система обмена сообщениями", "Apache Kafka")
+
+System_Ext(creditBureau, "Бюро кредитных историй", "Внешний источник данных о кредитной истории заёмщиков")
+System_Ext(telecomOperator, "Телеком-оператор")
+
+Rel(client, internetBank, "Использует")
+Rel(client, website, "Использует")
+
+Rel(internetBank, creditSystem, "операции с кредитами", "HTTPS REST API")
+Rel(website, creditSystem, "операции с кредитами", "HTTPS REST API")
+
+Rel(backEmployee, abs, "Управляет счётами и операциями в системе")
+Rel(creditEmployee, creditConveyor, "Обрабатывает и одобряет кредитные заявки")
+
+Rel(creditSystem, messageBroker, "события операций", "Kafka Topics")
+Rel(abs, creditConveyor, "Управляет кредитными заявками и данными о клиентах")
+Rel(abs, messageBroker, "события операций", "Kafka Topics")
+
+Rel(creditConveyor, scoringSystem, "Запрашивает оценку кредитоспособности", "HTTPS REST API")
+Rel(scoringSystem, creditBureau, "Получает кредитную историю заёмщика", "HTTPS REST API")
+
+Rel(creditSystem, smsGateway, "Отправляет СМС-коды подтверждения и уведомления", "HTTPS")
+Rel(smsGateway, telecomOperator, "отправка СМС")
+Rel(telecomOperator, client, "Доставка СМС уведомлений")
+
+Rel(creditSystem, scoringSystem, "Получает результаты скоринга для одобрения", "HTTPS REST API")
+Rel(creditSystem, creditBureau, "Запрашивает кредитную историю клиента", "HTTPS REST API")
+
+LAYOUT_TOP_DOWN()
+
+@enduml

@@ -1,0 +1,54 @@
+@startuml Containers
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(client, "Клиент банка")
+Person(backEmployee, "Сотрудник бэк-офиса")
+
+Container(website, "Сайт", "PHP + React.js")
+Container(internetBank, "Интернет-банк", "React.js + ASP.NET MVC 4.5 + MS SQL")
+
+System_Boundary(absSystem, "АБС"){
+    Container(abs, "Клиент", "Delphi")
+    Container(absMQIntegration, "Интеграция с брокером сообщений", ".NET")
+    ContainerDb(absDb, "База данных", "Oracle")
+}
+
+System_Boundary(creditSystem, "Система для работы с кредитами"){
+    Container(creditService, "Сервис для работы с кредитами", ".NET")
+    ContainerDb(creditServiceDb, "База данных", "PostgreSQL")
+    ContainerDb(creditCache, "Кэш данных", "Redis")
+}
+
+Container(scoringSystem, "Система кредитного скоринга", "Python + PostgreSQL")
+Container(smsGateway, "СМС-шлюз телеком-оператора")
+Container(messageBroker, "Система обмена сообщениями", "Apache Kafka")
+
+Container_Ext(telecomOperator, "Телеком-оператор")
+Container_Ext(creditBureau, "Бюро кредитных историй")
+
+Rel(client, internetBank, "Использует")
+Rel(client, website, "Использует")
+
+Rel(backEmployee, abs, "Использует")
+Rel(internetBank, creditService, "операции с кредитами", "HTTPS REST API")
+Rel(website, creditService, "операции с кредитами", "HTTPS REST API")
+
+Rel_R(creditService, smsGateway, "Отправляет СМС-коды подтверждения и уведомления", "HTTPS")
+Rel(creditService, creditServiceDb, "Использует")
+Rel(creditService, creditCache, "Использует")
+
+Rel_R(smsGateway, telecomOperator, "отправка СМС")
+Rel_R(telecomOperator, client, "Доставка СМС уведомлений")
+
+Rel(abs, absDb, "Использует")
+Rel(creditService, scoringSystem, "Получает результаты скоринга для одобрения", "HTTPS REST API")
+Rel(creditService, creditBureau, "Запрашивает кредитную историю клиента", "HTTPS REST API")
+
+Rel(absMQIntegration, messageBroker, "события операций", "Kafka Topics")
+Rel(absMQIntegration, absDb, "Использует")
+Rel(creditService, messageBroker, "события операций", "Kafka Topics")
+
+LAYOUT_TOP_DOWN()
+
+@enduml
+

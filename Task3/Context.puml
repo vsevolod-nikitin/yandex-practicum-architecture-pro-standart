@@ -1,0 +1,34 @@
+@startuml Context
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+Person(client, "Клиент банка")
+Person(backEmployee, "Сотрудник бэк-офиса")
+
+System(website, "Сайт", "Информационный портал банка")
+System(internetBank, "Интернет-банк", "Приложение для управления счетами")
+System(depositSystem, "Система для работы с депозитами", "Управление депозитными счетами и операциями")
+System(abs, "Автоматизированная банковская система (АБС)", "Ядро банковской системы для обработки финансовых операций")
+System(smsGateway, "СМС-шлюз телеком-оператора", "Передача уведомлений клиентам")
+System(messageBroker, "Система обмена сообщениями", "Apache Kafka")
+
+System_Ext(telecomOperator, "Телеком-оператор")
+
+Rel(client, internetBank, "Использует")
+Rel(client, website, "Использует")
+
+Rel(backEmployee, depositSystem, "Использует")
+Rel(backEmployee, abs, "Использует")
+
+Rel(internetBank, depositSystem, "операции с депозитами", "HTTPS REST API")
+Rel(website, depositSystem, "информация о депозитах", "HTTPS REST API")
+
+Rel_L(depositSystem, smsGateway, "отправка SMS уведомлений", "HTTPS")
+Rel(depositSystem, messageBroker, "события операций", "Kafka Topics")
+Rel(abs, messageBroker, "события операций", "Kafka Topics")
+
+Rel_R(smsGateway, telecomOperator, "отправка СМС")
+Rel_R(telecomOperator, client, "Доставка СМС уведомлений")
+
+LAYOUT_TOP_DOWN()
+
+@enduml

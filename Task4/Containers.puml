@@ -1,0 +1,58 @@
+@startuml Containers
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(client, "Клиент банка")
+Person(backEmployee, "Сотрудник бэк-офиса")
+Person(callerEmployee, "Сотрудник кол-центра")
+Person(externalPartnerEmployee, "Сотрудник партнёрского кол-центра")
+
+Container(website, "Сайт", "PHP + React.js")
+Container(internetBank, "Интернет-банк", "React.js + ASP.NET MVC 4.5 + MS SQL")
+
+System_Boundary(absSystem, "АБС"){
+    Container(abs, "Клиент", "Delphi")
+    Container(absMQIntegration, "Интеграция с брокером сообщений", ".NET")
+    ContainerDb(absDb, "База данных", "Oracle")
+}
+
+System_Boundary(depositSystem, "Система для работы с депозитами"){
+    Container(depositServiceFrontend, "Фронтэнд сервиса депозитов", "React.js")
+    Container(depositService, "Сервис для работы с депозитами", ".NET")
+    ContainerDb(depositServiceDb, "База данных", "PostgreSQL")
+}
+
+Container(smsGateway, "СМС-шлюз телеком-оператора")
+Container(messageBroker, "Система обмена сообщениями", "Apache Kafka")
+
+Container_Ext(telecomOperator, "Телеком-оператор")
+Container_Ext(fileArchive, "Файловое хранилище", "S3-совместимое хранилище")
+
+Rel(client, internetBank, "Использует")
+Rel(client, website, "Использует")
+
+Rel(backEmployee, depositServiceFrontend, "Использует")
+Rel(backEmployee, abs, "Использует")
+
+Rel(internetBank, depositService, "операции с депозитами", "HTTPS REST API")
+Rel(website, depositService, "информация о депозитах", "HTTPS REST API")
+
+Rel(depositService, smsGateway, "отправка SMS уведомлений", "HTTPS")
+Rel_L(depositService, messageBroker, "события операций", "Kafka Topics")
+Rel(depositService, depositServiceDb, "Использует")
+Rel_R(depositServiceFrontend, depositService, "Использует", "HTTPS REST API")
+
+Rel_R(smsGateway, telecomOperator, "отправка СМС")
+Rel_R(telecomOperator, client, "Доставка СМС уведомлений")
+
+Rel(abs, absDb, "Использует")
+Rel(absMQIntegration, messageBroker, "события операций", "Kafka Topics")
+Rel(absMQIntegration, absDb, "Использует")
+
+Rel(callerEmployee, depositServiceFrontend, "Использует")
+Rel(externalPartnerEmployee, fileArchive, "Использует")
+Rel(depositService, fileArchive, "Сохраняет данные в", "HTTPS")
+
+LAYOUT_TOP_DOWN()
+
+@enduml
+
